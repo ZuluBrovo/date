@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;500&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3efe7;
+    --ink: #1c1a17;
+    --muted: #8a8378;
+    --line: #ddd6c9;
+    --card: #fbf9f4;
+    --accent: #c2410c;
+    --accent-soft: #f0d9cb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 12%, rgba(194,65,12,0.06), transparent 40%),
+      radial-gradient(circle at 85% 88%, rgba(40,60,90,0.05), transparent 45%);
+    color: var(--ink);
+    font-family: "Spline Sans", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    width: 100%;
+    max-width: 440px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: 0 1px 0 #fff inset, 0 30px 60px -30px rgba(40,30,15,0.25);
+    overflow: hidden;
+  }
+
+  .head {
+    padding: 30px 30px 22px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .kicker {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .body { padding: 26px 30px 30px; }
+
+  .field { margin-bottom: 18px; }
+
+  label {
+    display: block;
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+
+  input[type="date"] {
+    width: 100%;
+    padding: 13px 14px;
+    font-family: "Spline Sans", sans-serif;
+    font-size: 16px;
+    color: var(--ink);
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 3px;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color .18s, box-shadow .18s;
+  }
+  input[type="date"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .toggle {
+    display: flex;
+    gap: 8px;
+    margin: 4px 0 22px;
+  }
+  .toggle button {
+    flex: 1;
+    padding: 9px;
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #fff;
+    color: var(--muted);
+    border: 1.5px solid var(--line);
+    border-radius: 3px;
+    transition: all .15s;
+  }
+  .toggle button.active {
+    background: var(--ink);
+    color: var(--card);
+    border-color: var(--ink);
+  }
+
+  .result {
+    text-align: center;
+    padding: 26px 20px 22px;
+    background: linear-gradient(180deg, #fff, var(--accent-soft));
+    border: 1.5px solid var(--accent-soft);
+    border-radius: 4px;
+  }
+  .result-label {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .result-value {
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-size: 76px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .result-unit {
+    font-family: "Spline Sans", sans-serif;
+    font-size: 15px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-top: 20px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .cell {
+    background: var(--card);
+    padding: 14px 8px;
+    text-align: center;
+  }
+  .cell .v {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .cell .l {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .foot {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 18px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="head">
+    <div class="kicker">Days between two dates</div>
+    <h1>Date&nbsp;Counter</h1>
+  </div>
+
+  <div class="body">
+    <div class="field">
+      <label for="startDate">Start date</label>
+      <input type="date" id="startDate">
+    </div>
+
+    <div class="field">
+      <label for="endDate">End date</label>
+      <input type="date" id="endDate">
+    </div>
+
+    <label>Counting mode</label>
+    <div class="toggle">
+      <button id="incBtn" class="active" data-mode="inclusive">Inclusive</button>
+      <button id="excBtn" data-mode="exclusive">Exclusive</button>
+    </div>
+
+    <div class="result">
+      <div class="result-label">Total</div>
+      <div id="result" class="result-value">0</div>
+      <div id="resultUnit" class="result-unit">days</div>
+    </div>
+
+    <div class="breakdown">
+      <div class="cell"><div class="v" id="weeks">0</div><div class="l">Weeks</div></div>
+      <div class="cell"><div class="v" id="months">0</div><div class="l">Months</div></div>
+      <div class="cell"><div class="v" id="business">0</div><div class="l">Weekdays</div></div>
+    </div>
+
+    <div class="foot" id="foot">Inclusive counts both the start and end dates.</div>
+  </div>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  let mode = "inclusive";
+
+  const today = new Date();
+  const iso = d => d.toISOString().split('T')[0];
+  $('startDate').value = iso(today);
+  $('endDate').value = iso(today);
+
+  $('incBtn').addEventListener('click', () => setMode('inclusive'));
+  $('excBtn').addEventListener('click', () => setMode('exclusive'));
+  $('startDate').addEventListener('change', calc);
+  $('endDate').addEventListener('change', calc);
+
+  function setMode(m) {
+    mode = m;
+    $('incBtn').classList.toggle('active', m === 'inclusive');
+    $('excBtn').classList.toggle('active', m === 'exclusive');
+    $('foot').textContent = m === 'inclusive'
+      ? 'Inclusive counts both the start and end dates.'
+      : 'Exclusive counts the gap between the two dates.';
+    calc();
+  }
+
+  function countWeekdays(start, end) {
+    // counts weekdays (Mon–Fri) inclusive of both ends
+    let count = 0;
+    const d = new Date(start);
+    while (d <= end) {
+      const day = d.getDay();
+      if (day !== 0 && day !== 6) count++;
+      d.setDate(d.getDate() + 1);
+    }
+    return count;
+  }
+
+  function calc() {
+    const s = $('startDate').value;
+    const e = $('endDate').value;
+    if (!s || !e) { render(0, 0, 0, 0); return; }
+
+    const start = new Date(s + 'T00:00:00');
+    const end = new Date(e + 'T00:00:00');
+
+    let days = Math.round((end - start) / 86400000);
+    const sign = days < 0 ? -1 : 1;
+    let absDays = Math.abs(days);
+
+    if (mode === 'inclusive') absDays += 1;
+
+    const total = sign * absDays;
+
+    // weekday count uses the actual ordered range
+    const lo = start < end ? start : end;
+    const hi = start < end ? end : start;
+    let weekdays = countWeekdays(lo, hi);
+    if (mode === 'exclusive') {
+      // remove the endpoints' contribution roughly: recount strict interior
+      const interiorLo = new Date(lo); interiorLo.setDate(interiorLo.getDate() + 1);
+      weekdays = interiorLo <= hi ? countWeekdays(interiorLo, hi) : 0;
+      // exclusive gap excludes one endpoint
+      const interiorHi = new Date(hi); interiorHi.setDate(interiorHi.getDate() - 1);
+      weekdays = (lo <= interiorHi) ? countWeekdays(lo, interiorHi) : 0;
+    }
+
+    const weeks = (total / 7);
+    const months = (total / 30.44);
+
+    render(total, weeks, months, sign * weekdays);
+  }
+
+  function render(total, weeks, months, weekdays) {
+    $('result').textContent = total;
+    $('resultUnit').textContent = Math.abs(total) === 1 ? 'day' : 'days';
+    $('weeks').textContent = (Math.round(weeks * 10) / 10);
+    $('months').textContent = (Math.round(months * 10) / 10);
+    $('business').textContent = weekdays;
+  }
+
+  setMode('inclusive');
+</script>
+
+</body>
+</html>
